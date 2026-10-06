@@ -23,6 +23,7 @@ on:
     paths:
       - "legal-site/**"
       - ".github/workflows/legal-pages.yml"
+      - ".github/scripts/stage-legal-site.sh"
   workflow_dispatch: {}
 
 permissions:
@@ -39,22 +40,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Prove the staging guard actually rejects every bad entry type
-        run: scripts/selftest-legal-site-guard.sh
-      - name: Prove the yaic-legal publisher never destroys history or leaks identity
-        run: scripts/selftest-publish-legal-site.sh
       - name: Stage only allow-listed, validated files from legal-site/
-        run: |
-          # This directory is the ONLY thing this workflow ever publishes
-          # (via the staged copy below), so what passes here is exactly
-          # what becomes public. This allow-lists rather than deny-lists:
-          # only a regular, non-hardlinked file with an approved extension
-          # and no dotfile/hidden path component is copied into the staging
-          # dir that actually gets uploaded — never legal-site/ itself.
-          # Symlinks, hardlinks, device/FIFO/socket nodes, and nested .git
-          # directories are all refused by construction. See
-          # scripts/stage-legal-site.sh and its self-test above.
-          scripts/stage-legal-site.sh legal-site "$RUNNER_TEMP/legal-site-stage"
+        # #442/#443 (qa/defect-ledger.md): this step used to call
+        # scripts/stage-legal-site.sh, which the public repo never received
+        # (ENOENT, #442) — then, in a rejected fix attempt, inlined a
+        # hand-copied duplicate of that script's logic directly here, with a
+        # self-test that claimed but never actually proved the duplicate
+        # matched the original (#443). There is now exactly one copy of this
+        # logic: scripts/publish-legal-site.sh ships the real
+        # scripts/stage-legal-site.sh to .github/scripts/ in this repo (a
+        # path GitHub Pages never serves — Pages only ever gets what this
+        # step copies OUT of legal-site/ below), so this step can call the
+        # genuine file directly. See
+        # scripts/stage-legal-pages-publish-bundle.sh for what else gets
+        # shipped alongside legal-site/ and why.
+        run: .github/scripts/stage-legal-site.sh legal-site "$RUNNER_TEMP/legal-site-stage"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
