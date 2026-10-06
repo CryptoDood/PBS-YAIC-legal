@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Policy — YAIC</title>
+    <style>
+      body {
+        font-family: -apple-system, system-ui, sans-serif;
+        max-width: 760px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        line-height: 1.6;
+        color: #1a1a2e;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin-top: 2rem;
+      }
+      .meta {
+        color: #555;
+        font-size: 0.9rem;
+      }
+      footer {
+        margin-top: 3rem;
+        font-size: 0.85rem;
+        color: #777;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Privacy Policy</h1>
+    <p class="meta">
+      Prime Business Solutions LLC ("PBS") — YAIC<br />
+      Effective date: [PENDING PUBLICATION]
+    </p>
+
+    <h2>1. Who this policy covers</h2>
+    <p>
+      This policy covers YAIC, a product of Prime Business Solutions LLC ("PBS"). PBS incubates YAIC
+      and related products; as products graduate from the PBS incubator, operating or licensing
+      ownership may transfer to a downstream entity (for example, Nexus Prime) under a documented
+      agreement. This policy describes PBS's current data-handling practices for YAIC regardless of
+      that future ownership path.
+    </p>
+
+    <h2>2. What data we process</h2>
+    <ul>
+      <li>
+        <strong>Case and workflow data</strong>: checklist status, document metadata, conversation
+        content, and the canonical state of a customer's case with a business using YAIC ("tenant").
+      </li>
+      <li>
+        <strong>Documents</strong>: identity, financial, or other regulated documents a tenant's
+        workflow requires, classified at intake and handled per that classification.
+      </li>
+      <li>
+        <strong>Messages</strong>: content sent and received across connected channels, preserved in
+        original language alongside any translation.
+      </li>
+      <li>
+        <strong>Staff/operator data</strong>: the identity of tenant staff who act on cases,
+        explicitly linked by that staff member, never inferred.
+      </li>
+      <li>
+        <strong>Channel-provider metadata</strong>: whatever a connected channel itself provides
+        when relaying a message — message IDs, timestamps, sender identifiers on that channel.
+      </li>
+    </ul>
+
+    <h2>3. Tenant isolation</h2>
+    <p>
+      Every tenant's data is isolated from every other tenant's by architecture. No tenant's
+      credentials, case data, or staff identity mappings are reachable from another tenant's request
+      context.
+    </p>
+
+    <h2>4. Data minimization and classification</h2>
+    <p>
+      Data is classified at intake (identity, financial, regulated, or general) and that
+      classification governs storage, retention, and access. Where a workflow allows, document
+      content defaults to pass-through: we validate against policy and extract only the specific
+      fields the workflow needs. We do not collect what the workflow does not need.
+    </p>
+
+    <h2>5. Retention and deletion</h2>
+    <p>
+      Retention is configured per tenant per document class. Deleting content removes or
+      irreversibly redacts it from primary and backup storage; our audit trail keeps the fact that
+      an action occurred without retaining the deleted content itself. Deletion propagates to
+      backups within a bounded time.
+    </p>
+
+    <h2>6. Multilingual handling</h2>
+    <p>
+      Where a tenant and their customer work in different languages, we preserve the
+      original-language content alongside any translation — translation never silently alters
+      canonical facts (names, dates, identifiers, monetary values, document identity, or checklist
+      state).
+    </p>
+
+    <h2>7. Logging</h2>
+    <p>
+      Operational logs never carry message content, contact details, caller identity strings,
+      third-party provider response text, or credentials.
+    </p>
+
+    <h2>8. Connected providers</h2>
+    <p>
+      Depending on which channels and integrations a tenant configures, the following providers may
+      process data strictly to deliver that tenant's own messages/data through that channel: Meta /
+      WhatsApp Business Platform, Slack Technologies, Telegram, Discord, LinkedIn (where
+      configured), Google Cloud Platform, Google Workspace, and the tenant's own connected CRM.
+    </p>
+
+    <h2>9. Your choices and rights</h2>
+    <p>[PENDING: jurisdiction-specific rights language.]</p>
+
+    <h2>10. Changes to this policy</h2>
+    <p>We will provide notice of material changes to this policy.</p>
+
+    <h2>11. Contact</h2>
+    <p>[PENDING: contact address.]</p>
+
+    <footer>
+      &copy; Prime Business Solutions LLC. <a href="./index.html">Back</a> ·
+      <a href="./terms.html">Terms of Service</a>
+    </footer>
+  </body>
+</html>

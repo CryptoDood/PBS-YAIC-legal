@@ -1,0 +1,72 @@
+name: Publish legal pages
+
+# Publishes only legal-site/ (public legal material: Privacy Policy, Terms
+# of Service, and an index linking them) to GitHub Pages. $0 incremental
+# spend (GitHub Pages is free for a repository that already has it
+# enabled), no secrets, no private architecture, no customer data, no
+# internal assurance evidence, no production credentials, no personal
+# information — Founder decision, 2026-10-05 ("legal-page publishing"),
+# approved this narrow scope on those exact conditions.
+#
+# This workflow alone does not make anything public: GitHub Pages must
+# still be enabled for this repository (Settings -> Pages -> Build and
+# deployment -> Source: GitHub Actions) before this workflow's deploy step
+# can publish anything. That one-time repository-settings change is
+# outside what this workflow (or any tool available to the session that
+# authored it) can do on its own — it needs a repository owner/admin.
+# Until it's enabled, this workflow's build job still runs on every push
+# (so the output is always validated), but the deploy job is a no-op.
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "legal-site/**"
+      - ".github/workflows/legal-pages.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prove the staging guard actually rejects every bad entry type
+        run: scripts/selftest-legal-site-guard.sh
+      - name: Prove the yaic-legal publisher never destroys history or leaks identity
+        run: scripts/selftest-publish-legal-site.sh
+      - name: Stage only allow-listed, validated files from legal-site/
+        run: |
+          # This directory is the ONLY thing this workflow ever publishes
+          # (via the staged copy below), so what passes here is exactly
+          # what becomes public. This allow-lists rather than deny-lists:
+          # only a regular, non-hardlinked file with an approved extension
+          # and no dotfile/hidden path component is copied into the staging
+          # dir that actually gets uploaded — never legal-site/ itself.
+          # Symlinks, hardlinks, device/FIFO/socket nodes, and nested .git
+          # directories are all refused by construction. See
+          # scripts/stage-legal-site.sh and its self-test above.
+          scripts/stage-legal-site.sh legal-site "$RUNNER_TEMP/legal-site-stage"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/legal-site-stage
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
